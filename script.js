@@ -23,13 +23,35 @@ function showSuccess(input) {
     const formControl = input.parentElement;
     //Replace the class - add success
     formControl.className = "form-control success";
-
 }
 
 //Function to check if email is valid
-function isValidEmail(email) {
+function checkEmail(input) {
     const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    return re.test(String(email).toLowerCase());
+    if (re.test(input.value.trim())) {
+        showSuccess(input);
+    } else {
+        showError(input, `Please provide a valid email`)
+    }
+}
+
+//Function to check lenght of input field
+function checkLength(input, min, max) {
+    if (input.value.length < min) {
+        showError(input, `${getFieldID(input)} needs to be atleast ${min} characters`);
+    } else if (input.value.length > max) {
+        showError(input, `${getFieldID(input)} needs to be less than ${max} characters`);
+    } else {
+        showSuccess(input);
+    }
+}
+
+//Function to check if password & confirm password match
+
+function checkPasswordMatch(input1, input2) {
+    if (input1.value !== input2.value) {
+        showError(input2, "Passord don't match")
+    }
 }
 
 //Function to check if required fields have data
@@ -55,6 +77,10 @@ form.addEventListener('submit', function (e) {
     //stop page from reloading on submit
     e.preventDefault()
 
-    checkRequired([username, email, password, password2])
+    checkRequired([username, email, password, password2]);
+    checkLength(username, 3, 10);
+    checkLength(password, 6, 20);
+    checkEmail(email);
+    checkPasswordMatch(password, password2)
 
 })
