@@ -14,7 +14,7 @@ function showError(input, message) {
     //Get the small element for the error message
     const small = formControl.querySelector('small');
     //Replace the text for small element using the input message
-    small.innerText = message;
+    small.innerText = message; 
 }
 
 //Function to update class for success
@@ -32,29 +32,40 @@ function isValidEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
-//Function to check if required fields have data
-
-function checkRequired(inputArray) {
-    inputArray.forEach(function (input) {
-        if (input.value === "") {
-            showError(input, `${getFieldID(input)} is required`);
-        } else {
-            showSuccess(input);
-        }
-    });
-}
-
-//Function to get the id of the input field with proper case
-function getFieldID(input) {
-    return input.id.charAt(0).toUpperCase() + input.id.slice(1);
-}
-
 // Event Listner
 // Create event listner for submit button
 form.addEventListener('submit', function (e) {
     //stop page from reloading on submit
     e.preventDefault()
 
-    checkRequired([username, email, password, password2])
+    //Check to see if fields meet require field requirment
+    // Check if username input is empty
+    if (username.value === "") {
+        showError(username, "Username is required");
+    } else {
+        showSuccess(username)
+    }
+    
+    // Check if email input is empty
+    if (email.value === "") {
+        showError(email, "Email is required");
+    } else if (!isValidEmail(email.value)) {
+        showError(email, "Email is invalid")
+    } else {
+        showSuccess(email)
+    }
 
+    // Check if password input is empty
+    if (password.value === "") {
+        showError(password, "Password is required");
+    } else {
+        showSuccess(password)
+    }
+
+    // Check if confirm password input is empty
+    if (password2.value === "") {
+        showError(password2, "Confirm Password is required");
+    } else {
+        showSuccess(password2)
+    }
 })
